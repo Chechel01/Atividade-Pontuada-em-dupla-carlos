@@ -8,7 +8,7 @@ function PaginaEntrada() {
   const navigate = useNavigate();
 
   const handleIrParaCadastro = () => {
-    navigate('/usuarios');
+    navigate('/pratos/cadastro');
   };
 
   const handleIrParaCardapio = () => {
