@@ -13,7 +13,7 @@ function ListaDePratos() {
             try {
                 // 3. Endpoint da API corrigido para '/pratos' (porta 8080 é o padrão do Spring Boot)
                 //    Em um projeto real, a URL base viria de uma variável de ambiente.
-                const response = await axios.get('http://localhost:8080/pratos');
+                const response = await axios.get('http://localhost:8080/usuarios');
                 setPratos(response.data);
             } catch (error) {
                 console.error("Erro ao buscar pratos:", error); // É uma boa prática logar o erro no console
