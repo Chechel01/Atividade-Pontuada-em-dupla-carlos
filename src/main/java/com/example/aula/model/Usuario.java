@@ -13,7 +13,7 @@ public class Usuario {
     private Long id;
 
     @NotBlank(message = "Escreva o nome do prato.")
-    private String nomeDoPrato;
+    private String nomePrato;
 
     @NotBlank(message = "coloque a descrição.")
     private String descricao;
@@ -28,15 +28,16 @@ public class Usuario {
     @NotNull(message = "coloque a disponibilidade do item.")
     private String disponibilidade;
 
-    @NotNull(message = "colocação de imagem.")
+    @NotBlank(message = "colocação de imagem.")
+    @Column(name = "url_imagem", nullable = false)
     private String urlImagem;
 
     public Usuario() {
     }
 
-    public Usuario(Long id, String nomeDoPrato, String descricao, int preco, String categoria, String disponibilidade, String urlImagem) {
+    public Usuario(Long id, String nomePrato, String descricao, int preco, String categoria, String disponibilidade, String urlImagem) {
         this.id = id;
-        this.nomeDoPrato = nomeDoPrato;
+        this.nomePrato = nomeDoPrato;
         this.descricao = descricao;
         this.preco = preco;
         this.categoria = categoria;
@@ -57,7 +58,7 @@ public class Usuario {
     }
 
     public void setNomeDoPrato(String nomeDoPrato) {
-        this.nomeDoPrato = nomeDoPrato;
+        this.nomePrato = nomePrato;
     }
 
     public String getDescricao() {

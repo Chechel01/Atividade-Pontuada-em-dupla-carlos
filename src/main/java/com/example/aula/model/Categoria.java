@@ -1,4 +1,4 @@
-//package com.example.aula.model;
+//package com.example.aula.model;/
 //
 //public enum Categoria {
 //    ENTRADA,
