@@ -1,0 +1,73 @@
+/* Estilo para o contêiner principal da página/seção */
+.lista-de-pratos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+    text-align: center;
+    box-sizing: border-box;
+}
+
+.logo {
+    width: 200px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
+}
+
+.mensagem-vazia {
+    font-size: 1.2rem; /* Aumentei um pouco para dar mais destaque */
+    color: white;
+    margin: 20px 0;
+}
+
+/* === NOVOS ESTILOS ADICIONADOS ABAIXO === */
+
+/* Estilo para a lista (<ul>) que contém os pratos */
+.lista-pratos {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap; /* Permite que os itens quebrem para a próxima linha */
+    justify-content: center; /* Centraliza os cards de prato */
+    gap: 25px; /* Espaço entre os cards */
+    width: 100%;
+    max-width: 1200px; /* Define uma largura máxima para a lista */
+}
+
+/* Estilo para cada item da lista (<li>), o nosso "card" de prato */
+.item-prato {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #333;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    width: 280px; /* Largura fixa para cada card */
+    text-align: left; /* Alinha o texto dentro do card à esquerda */
+    transition: transform 0.2s ease-in-out;
+}
+
+.item-prato:hover {
+    transform: translateY(-5px); /* Efeito de elevação ao passar o mouse */
+}
+
+/* Estilo para a imagem dentro do card */
+.imagem-prato {
+    width: 100%;
+    height: 180px;
+    object-fit: cover; /* Garante que a imagem cubra a área sem distorcer */
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+/* Estilo para o bloco de informações de texto */
+.info-prato {
+    font-size: 0.9rem;
+    line-height: 1.5; /* Melhora a legibilidade */
+}
+
+/* Destaque para os títulos (Nome, Descrição, etc.) */
+.info-prato strong {
+    color: #d9534f; /* Um tom de vermelho para combinar com o tema */
+}

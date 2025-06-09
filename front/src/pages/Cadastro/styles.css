@@ -1,10 +1,9 @@
-/* src\pages\Cadastro\styles.css */
-
-.pagina-cadastro {
+/* Classe renomeada para maior clareza e consistência com o componente */
+.pagina-cadastro-prato {
     display: flex;
     align-items: center;
     justify-content: center;
     min-height: 100vh;
     padding: 32px;
-    
-  }
+    box-sizing: border-box; /* Boa prática para garantir que o padding não 'estoure' o tamanho da tela */
+}

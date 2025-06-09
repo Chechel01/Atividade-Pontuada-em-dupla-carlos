@@ -1,12 +1,17 @@
-import FormularioCadastro from "../../components/FormularioCadastro";
+// 1. Importando o componente com o nome correto e do caminho correto
+import FormularioPrato from "../../components/FormularioPrato";
 import './styles.css';
 
-function PaginaCadastro(){
-    return(
-        <div className="pagina-cadastro">
-            <FormularioCadastro />
+// 2. Renomeando a página para ser mais específica
+function PaginaCadastroPrato() {
+    return (
+        // 3. (Opcional) Renomeando a classe CSS para maior clareza
+        <div className="pagina-cadastro-prato">
+            {/* 4. Renderizando o componente de formulário correto */}
+            <FormularioPrato />
         </div>
     );
 }
 
-export default PaginaCadastro;
+// 5. Exportando a página com o nome atualizado
+export default PaginaCadastroPrato;

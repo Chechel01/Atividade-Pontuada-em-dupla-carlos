@@ -1,53 +1,72 @@
-/* styles.css */
+/* src/pages/PaginaEntrada/styles.css */
 
-
-
+/* Estilo para a div principal com a classe "pagina-entrada" */
 .pagina-entrada {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100vh;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+
+    /* Fundo com imagem e gradiente para melhor leitura do texto */
+    background-color: #333; /* Cor de fallback caso a imagem não carregue */
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('../../assets/images/wallpaper oh mainha.jpeg');
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
-    font-family: Arial, sans-serif;
 }
 
+/* Estilo para a imagem com a classe "logo-entrada" */
 .logo-entrada {
-    width: 400px; /* ou o tamanho desejado */
+    width: 100%;
+    max-width: 400px;
+    height: auto;
     margin-bottom: 10px;
 }
-h1 {
+
+/* Estilos globais para h1 e h2 nesta página */
+.pagina-entrada h1 {
     font-size: 2.5rem;
     color: #fffdfdab;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-h2 {
+.pagina-entrada h2 {
     font-size: 1.5rem;
     color: #ffffff;
-    margin-bottom: 10px;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
 }
+
+/* Estilo para a div que agrupa os botões */
+.botoes-container {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Estilo para os botões com a classe "botao-entrada" */
 .botao-entrada {
-    padding: 10px 20px;
-    font-size: 1rem;
+    padding: 12px 25px;
+    font-size: 1.1rem;
     color: #000000;
     background-color: #ddaf16;
     border: none;
-    border-radius: 5px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    font-weight: bold;
+    transition: all 0.3s ease;
 }
 
+/* Efeito ao passar o mouse sobre o botão */
 .botao-entrada:hover {
     background-color: #f1a7a7;
-}
-
-.botoes-container {
-  display: flex;
-  gap: 20px;
-  margin-top: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

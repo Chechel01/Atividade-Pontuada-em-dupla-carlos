@@ -1,59 +1,81 @@
-/* src\pages\Lista\styles.css */
-
-
-.pagina-lista-usuarios {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    padding: 30px;
-    
-}
-.logo {
-    width: 200px;
-    margin-bottom: 20px;
-    filter: drop-shadow(0 0 5px rgba(0, 0, 0, 0.3));
-}
- /* container principal*/
-.pagina-lista-usuarios .container {
+.container-formulario {
+    background: rgba(145, 119, 119, 0.767);
+    padding: 40px 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 350px; /* Um pouco maior para caber o select */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Alinha os elementos ao centro horizontalmente */
-    justify-content: center; /* Opcional: se quiser centralizar verticalmente */
-    background: rgba(145, 119, 119, 0.767);
-    padding: 32px;
+    align-items: center;
     box-sizing: border-box;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 90%;
-    max-width: 400px;
-    max-height: 80vh;
-    overflow-y: auto;
-    border-radius: 8px;
-    text-align: center;
 }
-/* Texto: Lista de usuarios */
-.pagina-lista-usuarios .container h2 {
-    margin-top: 1;
+
+.logo-formulario {
+    width: 200px;
     margin-bottom: 20px;
-    font-size: 35px;
-    color: #ffffff;
 }
- /* Texto: Cadastrar pratos*/
-.pagina-lista-usuarios .container .link-voltar {
-    display: block;
-    margin-top: 20px;
-    font-size: 16px;
+
+.container-formulario h2 {
+    font-size: 20px;
     text-align: center;
-    color: #ffffff;
-    text-decoration: none;
+    font-weight: bold;
+    color: #284ea7;
+    margin-bottom: 20px;
 }
-.mensagem-vazia {
-    margin: 20px 0;
-    font-size: 1rem;
-    color: white;
+
+.container-formulario form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     width: 100%;
-    text-align: center;
+    gap: 15px; /* Espaço entre os campos */
 }
-.pagina-lista-usuarios .container .link-voltar:hover {
-    text-decoration: none;
+
+.container-formulario input,
+.container-formulario select,
+.container-formulario button {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    box-sizing: border-box;
+    font-size: 14px;
+    border: 1px solid #ccc;
+}
+
+.container-formulario button {
+    background-color: #cc5e1e;
+    color: white;
+    cursor: pointer;
+    font-weight: bold;
+    border: 2px solid #000000;
+    margin-top: 10px;
+    transition: background-color 0.3s;
+}
+
+.container-formulario button:hover {
+    background-color: #a54c18;
+}
+
+/* Estilos para o componente MensagemFeedback (em seu próprio CSS ou aqui) */
+.mensagem {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 15px 25px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+.mensagem.visivel {
+    opacity: 1;
+}
+.mensagem.sucesso {
+    background-color: #28a745;
+}
+.mensagem.erro {
+    background-color: #d9534f;
 }
