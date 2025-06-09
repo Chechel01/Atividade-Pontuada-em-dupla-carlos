@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // 1. Importando os componentes de página com seus nomes finais e corretos
-import PaginaEntrada from './pages/PaginaEntrada'; 
+import PaginaEntrada from './pages/Primeira'; 
 import PaginaCadastroPrato from './pages/CadastroPrato';
 import PaginaCardapio from './pages/Cardapio';
 
