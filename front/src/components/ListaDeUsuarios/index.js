@@ -36,7 +36,7 @@ function ListaDeUsuarios() {
                             <strong>Preço: </strong> {usuario.preco}<br />
                             <strong>Categoria: </strong> {usuario.categoria}<br />
                             <strong>Disponibilidade: </strong> {usuario.disponibilidade}<br />
-                            <strong>Endereço URL: </strong> {usuario.enderecourl}<br />    
+                            <strong>URL da Imagem: </strong> {usuario.urlimagem}<br />    
                         </li>
                     ))}
                 </ul>

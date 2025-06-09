@@ -1,115 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './styles.css';
+// src\components\ListaDeUsuarios\index.js
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+import './styles.css'
 import logo from '../../assets/images/logocaruru.png';
-import useMensagem from '../../hooks/useMensagem';
-import MensagemFeedback from '../MensagemFeedback';
-import axios from 'axios';
 
-function FormularioCadastro() {
-    const [nomeprato, setNomePrato] = useState('');
-    const [descricao, setDescricao] = useState('');
-    const [preco, setPreco] = useState('');
-    const [categoria, setCategoria] = useState('');
-    const [disponibilidade, setDisponibilidade] = useState('');
-    const [enderecourl, setEnderecourl] = useState('');
+function ListaDeUsuarios() {
+    const [usuarios, setUsuarios] = useState([]);
 
-    const navigate = useNavigate();
-    const { mostrarMensagem, mensagem, tipoMensagem, visivel, fecharMensagem } = useMensagem();
-
-    const cadastroUsuarios = async (event) => {
-        event.preventDefault();  // Evitar que a página recarregue ao submeter o formulário
-        try {
-            const response = await axios.post('http://localhost:3030/usuario', {
-                nomeprato,
-                descricao,
-                preco,
-                categoria,
-                disponibilidade,
-                enderecourl
-            });
-            mostrarMensagem(response.data.mensagem || 'Prato cadastrado com sucesso!', 'sucesso');
-            setNomePrato('');
-            setDescricao('');
-            setPreco('');
-            setCategoria('');
-            setDisponibilidade(''); 
-            setEnderecourl(''); 
-        } catch (error) {
-            let erroMsg = 'Erro ao conectar ao servidor. ';
-            if (error.response && error.response.data) {
-                erroMsg += error.response.data.mensagem || 'Erro ao cadastrar prato.';
-                if (error.response.data.erros) {
-                    erroMsg += ' ' + error.response.data.erros.join(', ');
-                }
+    useEffect(() => {
+        const carregarUsuarios = async () => {
+            try {
+                const response = await axios.get('http://localhost:3030/usuario');
+                setUsuarios(response.data);
+            } catch (error) {
+                alert('Erro ao buscar pratos.');
+                setUsuarios([]);
             }
-            mostrarMensagem(erroMsg, 'erro');
-        }
-    };
+        };
+        carregarUsuarios();
+    }, []);
 
     return (
-        <div className="container">
-            <div className="formulario-cadastro">
-                <img src={logo} alt="Logo" className="logo" />
-                <h1>Formulario</h1>
-                <form onSubmit={cadastroUsuarios}>
-                    <input
-                        type="text"
-                        placeholder="Nome do Prato"
-                        value={nomeprato}
-                        onChange={(e) => setNomePrato(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Descricao"
-                        value={descricao}
-                        onChange={(e) => setDescricao(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Preco"
-                        value={preco}
-                        onChange={(e) => setPreco(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Categoria"
-                        value={categoria}
-                        onChange={(e) => setCategoria(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Disponibilidade"
-                        value={disponibilidade}
-                        onChange={(e) => setDisponibilidade(e.target.value)}
-                        required
-                    />
-                    <input
-                        type="text"
-                        placeholder="Link da imagem"
-                        value={enderecourl}
-                        onChange={(e) => setEnderecourl(e.target.value)}
-                        required
-                    />
-                    <button type="submit">Cadastrar</button>
-                </form>
-                <button onClick={() => navigate('/Lista')} className="link-usuarios">
-                    Ver pratos cadastrados
-                </button>
+        <div className="lista-de-usuarios">
+            <img src={logo} alt="Logo" className="logo" />
 
-                <MensagemFeedback
-                    mensagem={mensagem}
-                    tipoMensagem={tipoMensagem}
-                    visivel={visivel}
-                    fecharMensagem={fecharMensagem}
-                />
-            </div>
+            {usuarios.length === 0 ? (
+                <p className="mensagem-vazia">Nenhum prato encontrado.</p>
+            ) : (
+                <ul className="lista-usuarios">
+                    {usuarios.map(usuario => (
+                        <li key={usuario.id}>
+                            <strong>Nomeprato: </strong> {usuario.nomeprato}<br />
+                            <strong>Descrição: </strong> {usuario.descricao}<br />
+                            <strong>Preço: </strong> {usuario.preco}<br />
+                            <strong>Categoria: </strong> {usuario.categoria}<br />
+                            <strong>Disponibilidade: </strong> {usuario.disponibilidade}<br />
+                            <strong>URL da Imagem: </strong> {usuario.urlimagem}<br />    
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }
 
-export default FormularioCadastro;
+export default ListaDeUsuarios;
