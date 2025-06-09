@@ -37,7 +37,7 @@ public class Usuario {
 
     public Usuario(Long id, String nomePrato, String descricao, int preco, String categoria, String disponibilidade, String urlImagem) {
         this.id = id;
-        this.nomePrato = nomeDoPrato;
+        this.nomePrato = nomePrato;
         this.descricao = descricao;
         this.preco = preco;
         this.categoria = categoria;
@@ -54,10 +54,10 @@ public class Usuario {
     }
 
     public String getNomeDoPrato() {
-        return nomeDoPrato;
+        return nomePrato;
     }
 
-    public void setNomeDoPrato(String nomeDoPrato) {
+    public void setNomeDoPrato(String nomePrato) {
         this.nomePrato = nomePrato;
     }
 
