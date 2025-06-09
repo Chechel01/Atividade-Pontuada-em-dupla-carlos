@@ -3,12 +3,10 @@ package com.example.aula.exception;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,63 +14,63 @@ import java.util.Map;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // Exceção para argumentos inválidos (ex: ID inválido)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<Map<String, Object>> handlerIllegalArgument(IllegalArgumentException erro) {
-        return buildResponse(HttpStatus.BAD_REQUEST, erro.getMessage());
+    // Erro 404 para recurso não encontrado (ID não existe, etc.)
+    @ExceptionHandler(RecursoNaoEncontradoException.class)
+    public ResponseEntity<Map<String, Object>> handleRecursoNaoEncontrado(RecursoNaoEncontradoException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
-    // Exceção para erros em tempo de execução
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<Map<String, Object>> handlerRuntimeException(RuntimeException erro) {
-        return buildResponse(HttpStatus.BAD_REQUEST, erro.getMessage());
-    }
-
-    // Exceção para erros de validação de argumentos no método (ex: campos obrigatórios não preenchidos)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handlerMethodArgumentNotValidException(MethodArgumentNotValidException erro) {
-        String mensagemErro = erro.getBindingResult().getFieldErrors().isEmpty() ?
-                "Erro de validação desconhecido" :
-                erro.getFieldErrors().get(0).getDefaultMessage();
-        return buildResponse(HttpStatus.BAD_REQUEST, mensagemErro);
-    }
-
-    // Exceção para nome já cadastrado (exemplo de uma exceção customizada)
+    // Erro 409 para conflito (tentativa de criar recurso que já existe)
     @ExceptionHandler(NomeJaCadastradoException.class)
-    public ResponseEntity<Map<String, Object>> handlerNomeJaCadastrado(NomeJaCadastradoException erro) {
-        return buildResponse(HttpStatus.CONFLICT, erro.getMessage());
+    public ResponseEntity<Map<String, Object>> handleNomeJaCadastrado(NomeJaCadastradoException ex) {
+        return buildResponse(HttpStatus.CONFLICT, ex.getMessage());
     }
 
-    // Exceção para método HTTP não suportado (ex: método GET em um endpoint que espera POST)
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public ResponseEntity<Map<String, Object>> handlerHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException erro) {
-        return buildResponse(HttpStatus.METHOD_NOT_ALLOWED, "Método HTTP não suportado");
+    // Erro 400 para falhas de validação (@Valid)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex) {
+        Map<String, String> fieldErrors = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error ->
+            fieldErrors.put(error.getField(), error.getDefaultMessage())
+        );
+        return buildValidationResponse(HttpStatus.BAD_REQUEST, "Erro de validação.", fieldErrors);
     }
 
-    // Exceção para recurso não encontrado (ex: URL inexistente)
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<Map<String, Object>> handlerNoResourceFoundException(NoResourceFoundException erro) {
-        return buildResponse(HttpStatus.NOT_FOUND, "Recurso não encontrado");
-    }
-
-    // Exceção para problemas de leitura de corpo de requisição (ex: JSON mal formatado)
+    // Erro 400 para JSON mal formatado
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, Object>> handlerHttpMessageNotReadableException(HttpMessageNotReadableException erro) {
-        return buildResponse(HttpStatus.BAD_REQUEST, "Corpo da requisição mal formatado ou ausente");
+    public ResponseEntity<Map<String, Object>> handleJsonMalformed(HttpMessageNotReadableException ex) {
+        return buildResponse(HttpStatus.BAD_REQUEST, "Corpo da requisição está mal formatado ou ausente.");
+    }
+    
+    // Erro 404 para endpoint/URL não encontrada
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleNoHandlerFound(NoHandlerFoundException ex) {
+        return buildResponse(HttpStatus.NOT_FOUND, "Endpoint não encontrado: " + ex.getRequestURL());
     }
 
-    // Exceção genérica para erros não capturados explicitamente
+    // Erro 500 para qualquer outra exceção inesperada
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<Map<String, Object>> handlerGenericException(Exception erro) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno no servidor: " + erro.getMessage());
+    public ResponseEntity<Map<String, Object>> handleGenericException(Exception ex) {
+        // Em produção, seria bom logar o 'ex.getMessage()' mas não expô-lo ao cliente
+        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Ocorreu um erro interno no servidor.");
     }
 
-    // Método auxiliar para criar uma resposta padrão
-    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String mensagem) {
-        Map<String, Object> response = new HashMap<>();
-        response.put("status", status.value());
-        response.put("mensagem", mensagem);
-        response.put("timestamp", System.currentTimeMillis());
-        return ResponseEntity.status(status).body(response);
+    // Método auxiliar para respostas de erro simples
+    private ResponseEntity<Map<String, Object>> buildResponse(HttpStatus status, String message) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", status.value());
+        body.put("mensagem", message);
+        body.put("timestamp", System.currentTimeMillis());
+        return new ResponseEntity<>(body, status);
+    }
+    
+    // Método auxiliar para respostas de erro de validação com detalhes
+    private ResponseEntity<Object> buildValidationResponse(HttpStatus status, String message, Map<String, String> errors) {
+        Map<String, Object> body = new HashMap<>();
+        body.put("status", status.value());
+        body.put("mensagem", message);
+        body.put("detalhes", errors);
+        body.put("timestamp", System.currentTimeMillis());
+        return new ResponseEntity<>(body, status);
     }
 }
