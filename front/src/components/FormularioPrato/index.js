@@ -1,66 +1,122 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-import './styles.css';
+import { useState } from 'react';
+import axios from 'axios';
+import './styles.css'; // Reutilizando o CSS que você já criou
 import logo from '../../assets/images/logocaruru.png';
 
-// 1. Componente renomeado para refletir seu propósito
-function ListaDePratos() {
-    // 2. Estado renomeado para ser mais claro
-    const [pratos, setPratos] = useState([]);
+// Este é o componente correto para o formulário
+function FormularioPrato() {
+    // State para armazenar os dados do formulário
+    const [formData, setFormData] = useState({
+        nomePrato: '',
+        descricao: '',
+        preco: '',
+        categoria: '',
+        disponibilidade: 'DISPONIVEL', // Valor padrão
+        urlImagem: ''
+    });
 
-    useEffect(() => {
-        const carregarPratos = async () => {
-            try {
-                // 3. Endpoint da API corrigido para '/pratos' (porta 8080 é o padrão do Spring Boot)
-                //    Em um projeto real, a URL base viria de uma variável de ambiente.
-                const response = await axios.get('http://localhost:8080/usuarios');
-                setPratos(response.data);
-            } catch (error) {
-                console.error("Erro ao buscar pratos:", error); // É uma boa prática logar o erro no console
-                alert('Erro ao buscar pratos.');
-                setPratos([]); // Garante que a lista fique vazia em caso de erro
+    // Função para atualizar o state quando o usuário digita
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({ ...formData, [name]: value });
+    };
+
+    // Função para enviar os dados para o backend
+    const handleSubmit = async (e) => {
+        e.preventDefault(); // Impede o recarregamento da página
+
+        // Validação simples para o preço
+        if (parseFloat(formData.preco) <= 0) {
+            alert("O preço deve ser um número positivo.");
+            return;
+        }
+
+        try {
+            // Enviando os dados para o endpoint de criação no backend
+            const response = await axios.post('http://localhost:8080/pratos', formData);
+            
+            // Se a requisição for bem-sucedida (status 201 Created)
+            alert(`Prato "${response.data.nomePrato}" cadastrado com sucesso!`);
+            
+            // Limpa o formulário após o sucesso
+            setFormData({
+                nomePrato: '',
+                descricao: '',
+                preco: '',
+                categoria: '',
+                disponibilidade: 'DISPONIVEL',
+                urlImagem: ''
+            });
+
+        } catch (error) {
+            // Tratamento de erros
+            if (error.response) {
+                // O backend retornou um erro (ex: nome duplicado, validação)
+                const errorMessage = error.response.data.mensagem || "Ocorreu um erro ao cadastrar o prato.";
+                alert(`Erro: ${errorMessage}`);
+            } else {
+                // Erro de rede ou o backend não está rodando
+                alert("Não foi possível se conectar ao servidor. Verifique se o backend está em execução.");
             }
-        };
-        carregarPratos();
-    }, []); // O array vazio garante que o useEffect rode apenas uma vez
-
-    // Função para formatar o preço como moeda brasileira
-    const formatarPreco = (preco) => {
-        return new Intl.NumberFormat('pt-BR', {
-            style: 'currency',
-            currency: 'BRL'
-        }).format(preco);
+            console.error("Erro ao cadastrar prato:", error);
+        }
     };
 
     return (
-        // 4. Classe CSS renomeada para consistência (lembre-se de atualizar o styles.css)
-        <div className="lista-de-pratos">
-            <img src={logo} alt="Logo" className="logo" />
-
-            {pratos.length === 0 ? (
-                <p className="mensagem-vazia">Nenhum prato encontrado no cardápio.</p>
-            ) : (
-                <ul className="lista-pratos">
-                    {/* 5. Mapeando a lista de 'pratos' e usando 'prato' como variável */}
-                    {pratos.map(prato => (
-                        <li key={prato.id} className="item-prato">
-                            {/* Bônus: Exibindo a imagem do prato */}
-                            <img src={prato.urlImagem} alt={prato.nomePrato} className="imagem-prato" />
-                            <div className="info-prato">
-                                {/* 6. Acessando as propriedades com camelCase, como vêm do backend */}
-                                <strong>Nome do Prato:</strong> {prato.nomePrato}<br />
-                                <strong>Descrição:</strong> {prato.descricao}<br />
-                                <strong>Preço:</strong> {formatarPreco(prato.preco)}<br />
-                                <strong>Categoria:</strong> {prato.categoria}<br />
-                                <strong>Disponibilidade:</strong> {prato.disponibilidade}<br />
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            )}
+        <div className="container"> {/* Usando a classe 'container' do seu CSS */}
+            <img src={logo} alt="Logo" />
+            <h2>Cadastro de Novo Prato</h2>
+            <form onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    name="nomePrato"
+                    value={formData.nomePrato}
+                    onChange={handleChange}
+                    placeholder="Nome do Prato"
+                    required
+                />
+                <input
+                    type="text"
+                    name="descricao"
+                    value={formData.descricao}
+                    onChange={handleChange}
+                    placeholder="Descrição do Prato"
+                    required
+                />
+                <input
+                    type="number"
+                    name="preco"
+                    value={formData.preco}
+                    onChange={handleChange}
+                    placeholder="Preço (Ex: 55.90)"
+                    step="0.01"
+                    required
+                />
+                <input
+                    type="text"
+                    name="categoria"
+                    value={formData.categoria}
+                    onChange={handleChange}
+                    placeholder="Categoria (Ex: Prato Principal)"
+                    required
+                />
+                <input
+                    type="text"
+                    name="urlImagem"
+                    value={formData.urlImagem}
+                    onChange={handleChange}
+                    placeholder="URL da Imagem do Prato"
+                    required
+                />
+                <select name="disponibilidade" value={formData.disponibilidade} onChange={handleChange} required>
+                    <option value="DISPONIVEL">Disponível</option>
+                    <option value="INDISPONIVEL">Indisponível</option>
+                </select>
+                
+                <button type="submit">Cadastrar Prato</button>
+            </form>
         </div>
     );
 }
 
-// 7. Exportando o componente com o nome correto
-export default ListaDePratos;
+export default FormularioPrato;
